@@ -9,7 +9,7 @@ if (Meteor.isClient) {
 	// helper function that returns all available websites
 	Template.website_list.helpers({
 		websites:function(){
-			return Websites.find({});
+			return Websites.find({}, {sort: {upVotes: -1}});
 		}
 	});
 
@@ -20,24 +20,26 @@ if (Meteor.isClient) {
 
 	Template.website_item.events({
 		"click .js-upvote":function(event){
-			// example of how you can access the id for the website in the database
-			// (this is the data context for the template)
 			var website_id = this._id;
-			console.log("Up voting website with id "+website_id);
-			// put the code in here to add a vote to a website!
 
-			return false;// prevent the button from reloading the page
+			// put the code in here to add a vote to a website!
+                        Websites.update(
+                          {_id:   website_id},
+                          {$inc:  {upVotes: 1}
+                        });
+
+			return false;        // prevent the button from reloading the page
 		}, 
 		"click .js-downvote":function(event){
-
-			// example of how you can access the id for the website in the database
-			// (this is the data context for the template)
 			var website_id = this._id;
-			console.log("Down voting website with id "+website_id);
 
 			// put the code in here to remove a vote from a website!
+                        Websites.update(
+                          {_id:   website_id},
+                          {$inc:  {downVotes: 1} 
+                        });
 
-			return false;// prevent the button from reloading the page
+			return false;        // prevent the button from reloading the page
 		}
 	})
 
@@ -46,14 +48,18 @@ if (Meteor.isClient) {
 			$("#website_form").toggle('slow');
 		}, 
 		"submit .js-save-website-form":function(event){
+			// saving new website
+                        Websites.insert({
+                           title:       event.target.title.value,
+                           url:         event.target.url.value,
+                           description: event.target.description.value,
+                           createdOn:   new Date(),
+                           createdBy:   Meteor.user()._id,
+                           upVotes:     0,
+                           downVotes:   0,
+                        });
 
-			// here is an example of how to get the url out of the form:
-			var url = event.target.url.value;
-			console.log("The url they entered is: "+url);
-			
-			//  put your website saving code in here!	
-
-			return false;// stop the form submit from reloading the page
+			return false;    // stop the form submit from reloading the page
 
 		}
 	});
