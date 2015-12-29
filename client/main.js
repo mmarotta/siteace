@@ -15,7 +15,21 @@ Router.route('/detail/:_id', function() {
 
 
 //// COLLECTIONS
-Websites = new Mongo.Collection("websites");
+//Websites = new Mongo.Collection("websites");
+/*
+PlayersIndex = new EasySearch.Index({
+    collection: Websites,
+    fields: ['title', 'url', 'description'],
+    engine: new EasySearch.Minimongo()
+});
+*/
+
+
+//// COMMENTS TEMPLATE
+Comments.ui.config({
+   template: 'bootstrap' // or ionic, semantic-ui
+});
+
 
 
 
@@ -26,6 +40,8 @@ Websites = new Mongo.Collection("websites");
 
 // helper function that returns all available websites
 Template.list.helpers({
+	playersIndex: () => PlayersIndex,
+
 	websites:function(){
 		return Websites.find({}, {sort: {upVotes: -1}});
 	}

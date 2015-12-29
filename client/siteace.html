@@ -11,7 +11,7 @@
     <nav class="navbar navbar-default">
        <div class="container-fluid">
            <div class="navbar-header">
-              <a class="navbar-brand" href="#">Site Ace</a>
+              <a class="navbar-brand" href="/">Site Ace</a>
            </div>
            <ul class="nav navbar-nav navbar-right">
               {{> loginButtons align="right"}}
@@ -20,7 +20,6 @@
     </nav>
 
     <div class="container">
-         {{> website_form}}
          {{> yield "content"}}
     </div>
 </template>
@@ -55,11 +54,22 @@
 
 <!-- template that displays several website items -->
 <template name="list">
+        {{> website_form}}
+<!--
 	<ol>
 	{{#each websites}}
-	{{> website_item}}
+	    {{> website_item}}
 	{{/each}}
 	</ol>
+-->
+	Search: {{> EasySearch.Input index=playersIndex }}
+
+    <ul>
+        {{#EasySearch.Each index=playersIndex }}
+		{{> website_item}}
+        {{/EasySearch.Each}}
+    </ul>
+
 </template>
 
 <!-- template that displays individual website entries -->
@@ -102,7 +112,7 @@
         <span class="glyphicon glyphicon-arrow-down" aria-hidden="true">Down votes</span>
         <span class="badge">{{downVotes}}</span>
 	<br/><br/>
-
+<!--
         <div class="well">
             <span class="glyphicon glyphicon-comment" style="font-size:1.8em;" aria-hidden="true">&nbsp;Comments</span>
             <br/><br/>
@@ -118,5 +128,8 @@
               <button type="submit" class="btn btn-primary js-add-comment" href="#">Add</button>
             </form>
         </div>
+-->
+	<div class="comment-section">
+		{{> commentsBox id=_id}}
+	</div>
 </template>
-
